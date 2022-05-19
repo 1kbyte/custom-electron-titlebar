@@ -1,6 +1,6 @@
 .cet-titlebar {
     position: absolute;
-    top: 0;
+    // top: 10px;
     // left: 0;
     right: 0;
     box-sizing: border-box;
@@ -23,8 +23,8 @@
     &.cet-windows,
     &.cet-linux {
         padding: 0;
-        height: 30px;
-        line-height: 30px;
+        // height: 30px;
+        // line-height: 30px;
         justify-content: left;
         overflow: visible;
 

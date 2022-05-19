@@ -2,6 +2,40 @@ import { Menu, MenuItem } from "electron";
 import { Color } from "./common/color";
 
 export interface TitlebarOptions extends MenubarOptions {
+
+    ///added by 1kbyte
+    /**
+     * Title bar left position, default not set
+     */
+    left?: string;
+
+    /**
+     * Title bar top position, default 0
+     */
+    top?: string;
+
+    /**
+     * Container top postition, default 30px.
+     */
+    containerTop?: string;
+
+    /**
+     * Title bar height, default 30
+     */
+    height?: string;
+
+    /**
+     * Wheather show title, default true
+     */
+    showTitle?: boolean;
+
+    /**
+     * Wheather show icon, default true
+     */
+    showIcon?: boolean;
+
+
+    ///end
     /**
      * The background color of titlebar.
      * **The default is `#ffffff`**

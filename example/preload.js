@@ -7,7 +7,11 @@ let titlebar;
 
 window.addEventListener('DOMContentLoaded', () => {
   titlebar = new Titlebar({
-    backgroundColor: Color.TRANSPARENT,
+    backgroundColor: Color.fromHex("#00ff00"),
+    left: "0px",
+    containerTop: "200px",
+    top: "10px",
+    height: "100px",
     itemBackgroundColor: Color.fromHex("#121212"),
     svgColor: Color.WHITE,
     icon: null,

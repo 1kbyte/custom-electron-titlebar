@@ -11,7 +11,7 @@
 import { isMacintosh, isWindows, isLinux } from './common/platform';
 import { Color, RGBA } from './common/color';
 import { EventType, hide, show, removeClass, addClass, append, $, addDisposableListener, prepend, removeNode } from './common/dom';
-import { Menu, ipcRenderer } from 'electron';
+import { Menu, ipcRenderer, autoUpdater } from 'electron';
 import { Menubar } from './menubar';
 import { TitlebarOptions } from './interfaces';
 import styles from './styles/titlebar.scss';
@@ -48,6 +48,12 @@ export default class Titlebar {
 	};
 
 	private defaultOptions: TitlebarOptions = {
+		left: "auto",
+		top: "0",
+		height: "30px",
+		containerTop: "30px",
+		showIcon: true,
+		showTitle: true,
 		shadow: false,
 		minimizable: true,
 		onMinimize: () => ipcRenderer.send('window-event', 'window-minimize'),
@@ -122,6 +128,10 @@ export default class Titlebar {
 		// Create titlebar
 		this.titlebar = $('div.cet-titlebar');
 		addClass(this.titlebar, isWindows ? 'cet-windows' : isLinux ? 'cet-linux' : 'cet-mac');
+		this.titlebar.style.left = this.options.left;
+		this.titlebar.style.top = this.options.top;
+		this.titlebar.style.height = this.options.height;
+		this.titlebar.style.lineHeight = this.options.height;
 
 		if (this.options.order) {
 			addClass(this.titlebar, `cet-${this.options.order}`);
@@ -134,24 +144,24 @@ export default class Titlebar {
 		this.dragRegion = append(this.titlebar, $('div.cet-drag-region'));
 
 		// Create window icon (Windows/Linux)
-		// if (!isMacintosh) {
-		// 	const icon = append(this.titlebar, $('div.cet-window-icon'));
-		// 	this.windowIcon = append(icon, $('img'));
-		// 	if (!this.options.icon) {
-		// 		let favicon: string;
-		// 		const nodeList = document.getElementsByTagName("link");
+		if (!isMacintosh) {
+			const icon = append(this.titlebar, $('div.cet-window-icon'));
+			this.windowIcon = append(icon, $('img'));
+			if (!this.options.icon) {
+				let favicon: string;
+				const nodeList = document.getElementsByTagName("link");
 
-		// 		for (let i = 0; i < nodeList.length; i++) {
-		// 			if ((nodeList[i].getAttribute("rel") == "icon") || (nodeList[i].getAttribute("rel") == "shortcut icon")) {
-		// 				favicon = nodeList[i].getAttribute("href");
-		// 			}
-		// 		}
+				for (let i = 0; i < nodeList.length; i++) {
+					if ((nodeList[i].getAttribute("rel") == "icon") || (nodeList[i].getAttribute("rel") == "shortcut icon")) {
+						favicon = nodeList[i].getAttribute("href");
+					}
+				}
 
-		// 		this.options.icon = favicon;
-		// 	}
+				this.options.icon = favicon;
+			}
 
-		// 	this.updateIcon(this.options.icon);
-		// }
+			this.updateIcon(this.options.icon);
+		}
 
 		// Create menubar
 		this.menubarContainer = append(this.titlebar, $('div.cet-menubar'));
@@ -166,7 +176,7 @@ export default class Titlebar {
 
 		if (IS_MAC_BIGSUR_OR_LATER) {
 			addClass(this.title, 'cet-bigsur');
-			this.titlebar.style.height = TOP_TITLEBAR_HEIGHT_MAC;
+			// this.titlebar.style.height = TOP_TITLEBAR_HEIGHT_MAC;
 		}
 
 		// Maximize/Restore on doubleclick
@@ -180,6 +190,7 @@ export default class Titlebar {
 		// Create controls (Windows/Linux)
 		if (!isMacintosh) {
 			this.windowControls = append(this.titlebar, $('div.cet-controls-container'));
+			this.windowControls.style.height = this.options.height;
 
 			// Minimize
 			if (this.options.onMinimize) {
@@ -382,7 +393,8 @@ export default class Titlebar {
 				if (this.options.menuPosition === 'bottom') {
 					this.container.style.top = BOTTOM_TITLEBAR_HEIGHT;
 				} else {
-					this.container.style.top = isMacintosh ? TOP_TITLEBAR_HEIGHT_MAC : TOP_TITLEBAR_HEIGHT_WIN;
+					// this.container.style.top = isMacintosh ? TOP_TITLEBAR_HEIGHT_MAC : TOP_TITLEBAR_HEIGHT_WIN;
+					this.container.style.top = this.options.containerTop;
 				}
 			}
 		}
@@ -473,11 +485,11 @@ export default class Titlebar {
 	 */
 	public updateMenuPosition(menuPosition: "left" | "bottom"): void {
 		if (isMacintosh) {
-			this.titlebar.style.height = menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_MAC;
-			this.container.style.top = "0";//menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_MAC;
+			this.titlebar.style.height = this.options.height; //menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_MAC;
+			this.container.style.top = this.options.containerTop;//menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_MAC;
 		} else {
-			this.titlebar.style.height = menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_WIN;
-			this.container.style.top = "0";//menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_WIN;
+			this.titlebar.style.height = this.options.height; //menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_WIN;
+			this.container.style.top = this.options.containerTop;//menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_WIN;
 		}
 		this.titlebar.style.flexWrap = menuPosition && menuPosition === 'bottom' ? 'wrap' : null;
 
