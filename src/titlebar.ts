@@ -134,24 +134,24 @@ export default class Titlebar {
 		this.dragRegion = append(this.titlebar, $('div.cet-drag-region'));
 
 		// Create window icon (Windows/Linux)
-		if (!isMacintosh) {
-			const icon = append(this.titlebar, $('div.cet-window-icon'));
-			this.windowIcon = append(icon, $('img'));
-			if (!this.options.icon) {
-				let favicon: string;
-				const nodeList = document.getElementsByTagName("link");
+		// if (!isMacintosh) {
+		// 	const icon = append(this.titlebar, $('div.cet-window-icon'));
+		// 	this.windowIcon = append(icon, $('img'));
+		// 	if (!this.options.icon) {
+		// 		let favicon: string;
+		// 		const nodeList = document.getElementsByTagName("link");
 
-				for (let i = 0; i < nodeList.length; i++) {
-					if ((nodeList[i].getAttribute("rel") == "icon") || (nodeList[i].getAttribute("rel") == "shortcut icon")) {
-						favicon = nodeList[i].getAttribute("href");
-					}
-				}
+		// 		for (let i = 0; i < nodeList.length; i++) {
+		// 			if ((nodeList[i].getAttribute("rel") == "icon") || (nodeList[i].getAttribute("rel") == "shortcut icon")) {
+		// 				favicon = nodeList[i].getAttribute("href");
+		// 			}
+		// 		}
 
-				this.options.icon = favicon;
-			}
+		// 		this.options.icon = favicon;
+		// 	}
 
-			this.updateIcon(this.options.icon);
-		}
+		// 	this.updateIcon(this.options.icon);
+		// }
 
 		// Create menubar
 		this.menubarContainer = append(this.titlebar, $('div.cet-menubar'));
@@ -474,10 +474,10 @@ export default class Titlebar {
 	public updateMenuPosition(menuPosition: "left" | "bottom"): void {
 		if (isMacintosh) {
 			this.titlebar.style.height = menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_MAC;
-			this.container.style.top = menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_MAC;
+			this.container.style.top = "0";//menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_MAC;
 		} else {
 			this.titlebar.style.height = menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_WIN;
-			this.container.style.top = menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_WIN;
+			this.container.style.top = "0";//menuPosition && menuPosition === 'bottom' ? BOTTOM_TITLEBAR_HEIGHT : TOP_TITLEBAR_HEIGHT_WIN;
 		}
 		this.titlebar.style.flexWrap = menuPosition && menuPosition === 'bottom' ? 'wrap' : null;
 
