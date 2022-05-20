@@ -8,12 +8,15 @@ let titlebar;
 window.addEventListener('DOMContentLoaded', () => {
   titlebar = new Titlebar({
     backgroundColor: Color.fromHex("#00ff00"),
+    // minimizable: false,
+    // maximizable: false,
     left: "0px",
     containerTop: "200px",
     top: "10px",
     height: "100px",
     itemBackgroundColor: Color.fromHex("#121212"),
     svgColor: Color.WHITE,
+    showIcon: false,
     icon: null,
     menu: null // = do not automatically use Menu.applicationMenu
   })

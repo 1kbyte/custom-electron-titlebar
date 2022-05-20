@@ -144,7 +144,7 @@ export default class Titlebar {
 		this.dragRegion = append(this.titlebar, $('div.cet-drag-region'));
 
 		// Create window icon (Windows/Linux)
-		if (!isMacintosh) {
+		if (!isMacintosh && this.options.showIcon) {
 			const icon = append(this.titlebar, $('div.cet-window-icon'));
 			this.windowIcon = append(icon, $('img'));
 			if (!this.options.icon) {
@@ -194,30 +194,32 @@ export default class Titlebar {
 
 			// Minimize
 			if (this.options.onMinimize) {
-				const minimizeIcon = append(this.windowControls, $('div.cet-icon'));
-				minimizeIcon.title = "Minimize";
-				minimizeIcon.innerHTML = this.platformIcons['minimize'];
-
-				if (!this.options.minimizable) {
-					addClass(minimizeIcon, 'inactive');
-				} else {
-					addDisposableListener(minimizeIcon, EventType.CLICK, () => this.options.onMinimize());
+				if(this.options.minimizable) {
+					const minimizeIcon = append(this.windowControls, $('div.cet-icon'));
+					minimizeIcon.title = "Minimize";
+					minimizeIcon.innerHTML = this.platformIcons['minimize'];
+					if (!this.options.minimizable) {
+						addClass(minimizeIcon, 'inactive');
+					} else {
+						addDisposableListener(minimizeIcon, EventType.CLICK, () => this.options.onMinimize());
+					}
 				}
 			}
 
 			// Restore
 			if (this.options.onMaximize) {
-				this.maxRestoreControl = append(this.windowControls, $('div.cet-icon'));
-				this.maxRestoreControl.innerHTML = this.platformIcons['maximize'];
-				addClass(this.maxRestoreControl, 'cet-max-restore');
-
-				if (!this.options.maximizable) {
-					addClass(this.maxRestoreControl, 'inactive');
-				} else {
-					addDisposableListener(this.maxRestoreControl, EventType.CLICK, () => {
-						this.options.onMaximize();
-						this.onDidChangeMaximized(this.options.isMaximized());
-					});
+				if(this.options.maximizable) {
+					this.maxRestoreControl = append(this.windowControls, $('div.cet-icon'));
+					this.maxRestoreControl.innerHTML = this.platformIcons['maximize'];
+					addClass(this.maxRestoreControl, 'cet-max-restore');
+					if (!this.options.maximizable) {
+						addClass(this.maxRestoreControl, 'inactive');
+					} else {
+						addDisposableListener(this.maxRestoreControl, EventType.CLICK, () => {
+							this.options.onMaximize();
+							this.onDidChangeMaximized(this.options.isMaximized());
+						});
+					}
 				}
 			}
 
